@@ -6,40 +6,48 @@ import TextField from "@material-ui/core/TextField";
 import {
   makeStyles,
   createMuiTheme,
-  ThemeProvider
+  ThemeProvider,
 } from "@material-ui/core/styles";
 
 import Autocomplete, {
-  createFilterOptions
+  createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 
 import { CircularProgress, CssBaseline, Paper } from "@material-ui/core";
 
 const filter = createFilterOptions();
 function sleep(delay = 0) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
 }
 const theme = createMuiTheme({
   palette: {
-    type: "dark"
-  }
+    type: "dark",
+  },
 });
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   popper: {
-    color: "white"
-  }
+    color: "white",
+  },
 }));
+const countriesMapped = (json) => {
+  console.log("countries: ", json);
+  return Object.keys(json).map((key) => json[key].item[0]);
+};
+const iconsMapped = (json) => {
+  console.log("icons: ", json);
 
-export default function FreeSoloCreateOption() {
+  return json.icons.map((icon) => icon);
+};
+
+export default function FreeSoloCreateOption({ url, tagUrl, type }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const loading = open && options.length === 0;
-  console.log(options);
-  
+
   React.useEffect(() => {
     let active = true;
 
@@ -48,14 +56,23 @@ export default function FreeSoloCreateOption() {
     }
 
     (async () => {
-      const response = await fetch(
-        "https://country.register.gov.uk/records.json?page-size=5000"
-      );
-      await sleep(1e3); // For demo purposes.
-      const countries = await response.json();
+      const response = await fetch(url);
+      await sleep(500); // For demo purposes.
+      const entries = await response.json();
 
       if (active) {
-        setOptions(Object.keys(countries).map(key => countries[key].item[0]));
+        switch (type) {
+          case "countries":
+            setOptions(countriesMapped(entries));
+            break;
+          case "icons":
+            console.log(entries);
+            setOptions(iconsMapped(entries));
+            break;
+          default:
+            return console.log("broken!");
+            break;
+        }
       }
     })();
     return () => {
@@ -86,12 +103,12 @@ export default function FreeSoloCreateOption() {
           onChange={(event, newValue) => {
             if (typeof newValue === "string") {
               setValue({
-                title: newValue
+                title: newValue,
               });
             } else if (newValue && newValue.inputValue) {
               // Create a new value from the user input
               setValue({
-                title: newValue.inputValue
+                title: newValue.inputValue,
               });
             } else {
               setValue(newValue);
@@ -104,7 +121,7 @@ export default function FreeSoloCreateOption() {
             if (params.inputValue !== "") {
               filtered.push({
                 inputValue: params.inputValue,
-                title: `Add "${params.inputValue}"`
+                title: `Add "${params.inputValue}"`,
               });
             }
 
@@ -112,13 +129,13 @@ export default function FreeSoloCreateOption() {
           }}
           id="free-solo-with-text-demo"
           getOptionSelected={(option, value) => option.name === value.name}
-          getOptionLabel={option => option.name}
+          getOptionLabel={(option) => option.name}
           options={options}
           loading={loading}
-          renderOption={option => option.name}
+          renderOption={(option) => option.name}
           style={{ width: 300 }}
           freeSolo
-          renderInput={params => (
+          renderInput={(params) => (
             <TextField
               {...params}
               label="Asynchronous"
@@ -132,17 +149,25 @@ export default function FreeSoloCreateOption() {
                     ) : null}
                     {params.InputProps.endAdornment}
                   </React.Fragment>
-                )
+                ),
               }}
             />
           )}
         />
         {value && (
           <div>
-            <p>{value.name}</p>
-            <p>{value.country}</p>
-            <p>{value["official-name"]}</p>
-            <p>{value["citizen-names"]}</p>
+            {Object.keys(value).map((entry, i) => {
+              console.log(value);
+              if (typeof value[entry] === "string") {
+                return (
+                  <div key={i}>
+                    <p> {entry}:</p>
+
+                    <p> {value[entry]} </p>
+                  </div>
+                );
+              }
+            })}
           </div>
         )}
       </Paper>
