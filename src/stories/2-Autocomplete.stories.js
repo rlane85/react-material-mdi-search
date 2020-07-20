@@ -8,10 +8,10 @@ export default {
 };
 const countriesUrl =
   "https://country.register.gov.uk/records.json?page-size=5000";
-const mdiTagUrl = "http://panelpi.ddns.net:3002/iconTags";
+const mdiTagUrl = "https://panelpi.ddns.net/iconTags";
 const mdiUrl =
-  "http://panelpi.ddns.net:3002/icons";
-  //forcing tag to minimize download size for now
+  "https://panelpi.ddns.net/icons";
+  
 export const Async = () => (
   <FreeSoloCreateOption type="countries" url={countriesUrl} onClick={action("clicked")} />
 );

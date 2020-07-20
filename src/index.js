@@ -4,9 +4,9 @@ import Demo from "./Autocomplete";
 
 const countriesUrl =
   "https://country.register.gov.uk/records.json?page-size=5000";
-const mdiTagUrl = "https://materialdesignicons.com/api/tags";
+const mdiTagUrl = "https://panelpi.ddns.net/iconTags";
 const mdiUrl =
-  "http://panelpi.ddns.net:3002/icons";
+  "https://panelpi.ddns.net/icons";
 const sandBoxProps = {
   type: "icons",
   tagUrl: mdiTagUrl,
