@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
 import React from "react";
 import fetch from "cross-fetch";
+import Icon from "@mdi/react";
 
-import TextField from "@material-ui/core/TextField";
 import {
   makeStyles,
   createMuiTheme,
@@ -13,7 +13,14 @@ import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 
-import { CircularProgress, CssBaseline, Paper } from "@material-ui/core";
+import {
+  TextField,
+  CircularProgress,
+  CssBaseline,
+  Paper,
+  Typography,
+  Grid,
+} from "@material-ui/core";
 
 const filter = createFilterOptions();
 function sleep(delay = 0) {
@@ -57,7 +64,7 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
 
     (async () => {
       const response = await fetch(url);
-      await sleep(500); // For demo purposes.
+      //await sleep(500); // For demo purposes.
       const entries = await response.json();
 
       if (active) {
@@ -132,7 +139,18 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
           getOptionLabel={(option) => option.name}
           options={options}
           loading={loading}
-          renderOption={(option) => option.name}
+          renderOption={(option) => {
+            return type === "icons" ? (
+              <React.Fragment>
+                <Grid container justify="space-between">
+                  <Icon path={option.data} size={1} />
+                  <Typography variant="body2">{option.name}</Typography>
+                </Grid>
+              </React.Fragment>
+            ) : (
+              option.name + "hi"
+            );
+          }}
           style={{ width: 300 }}
           freeSolo
           renderInput={(params) => (
@@ -159,8 +177,11 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
             {Object.keys(value).map((entry, i) => {
               console.log(value);
               if (typeof value[entry] === "string") {
+                if (entry === "data") {
+                  return <Icon key={entry + i} path={value[entry]} size={2} />;
+                }
                 return (
-                  <div key={i}>
+                  <div key={entry + i}>
                     <p> {entry}:</p>
 
                     <p> {value[entry]} </p>
