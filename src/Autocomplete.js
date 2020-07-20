@@ -64,7 +64,7 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
 
     (async () => {
       const response = await fetch(url);
-      //await sleep(500); // For demo purposes.
+
       const entries = await response.json();
 
       if (active) {
@@ -148,7 +148,7 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
                 </Grid>
               </React.Fragment>
             ) : (
-              option.name + "hi"
+              option.name
             );
           }}
           style={{ width: 300 }}
