@@ -37,7 +37,7 @@ const useDarkMode = () => {
   return [theme, toggleDarkMode];
 };
 
-export const MuiThemeThing = () => {
+export const MuiThemeThing = (props) => {
   const [theme, toggleDarkMode] = useDarkMode();
   const themeConfig = createMuiTheme(theme);
 
@@ -45,6 +45,7 @@ export const MuiThemeThing = () => {
     <MuiThemeProvider theme={themeConfig}>
       <Paper>
         <Button onClick={toggleDarkMode}>Change theme!</Button>
+        <div>{props.children}</div>
       </Paper>
     </MuiThemeProvider>
   );

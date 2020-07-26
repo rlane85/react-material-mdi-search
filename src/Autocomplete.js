@@ -22,17 +22,15 @@ import {
   Grid,
 } from "@material-ui/core";
 
+import { MuiThemeThing } from "./MuiThemeDemo";
+
 const filter = createFilterOptions();
 function sleep(delay = 0) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
 }
-const theme = createMuiTheme({
-  palette: {
-    type: "dark",
-  },
-});
+
 const useStyles = makeStyles((theme) => ({
   popper: {
     color: "white",
@@ -93,7 +91,7 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
     }
   }, [open]);
   return (
-    <ThemeProvider theme={theme}>
+    <MuiThemeThing>
       <CssBaseline />
       <Paper>
         <Autocomplete
@@ -192,6 +190,6 @@ export default function FreeSoloCreateOption({ url, tagUrl, type }) {
           </div>
         )}
       </Paper>
-    </ThemeProvider>
+    </MuiThemeThing>
   );
 }
